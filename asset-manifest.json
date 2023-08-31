@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.80285adc.css",
-    "main.js": "/static/js/main.0e922294.js",
-    "static/js/787.7c4cb66f.chunk.js": "/static/js/787.7c4cb66f.chunk.js",
-    "index.html": "/index.html",
-    "main.80285adc.css.map": "/static/css/main.80285adc.css.map",
-    "main.0e922294.js.map": "/static/js/main.0e922294.js.map",
-    "787.7c4cb66f.chunk.js.map": "/static/js/787.7c4cb66f.chunk.js.map"
+    "main.css": "/ePhone/static/css/main.80285adc.css",
+    "main.js": "/ePhone/static/js/main.edd6d609.js",
+    "static/js/787.7c4cb66f.chunk.js": "/ePhone/static/js/787.7c4cb66f.chunk.js",
+    "index.html": "/ePhone/index.html",
+    "main.80285adc.css.map": "/ePhone/static/css/main.80285adc.css.map",
+    "main.edd6d609.js.map": "/ePhone/static/js/main.edd6d609.js.map",
+    "787.7c4cb66f.chunk.js.map": "/ePhone/static/js/787.7c4cb66f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.80285adc.css",
-    "static/js/main.0e922294.js"
+    "static/js/main.edd6d609.js"
   ]
 }
