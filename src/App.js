@@ -8,12 +8,11 @@ function Phone({ url }) {
 
   return (
     <>
-      <Environment preset="night" />
       {/* <PresentationControls global polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]}> */}
       <PresentationControls global>
         {/* TODO: fix initial rotation */}
         <primitive object={model.scene} position-y={-1.35}>
-          <Html wrapperClass='iframe-wrapper' position={[.17, 1.32, .082]} distanceFactor={1.068} transform>
+          <Html wrapperClass='iframe-wrapper' position={[.17, 1.32, .091]} distanceFactor={1.068} transform occlude>
             <iframe src={url} title='ePhone screen' />
           </Html>
         </primitive>
@@ -33,9 +32,11 @@ function App() {
           position: [-3, 1.5, 3.1]
         }}>
         <Suspense fallback={null}>
+          <Environment preset="night" />
           <Phone url="https://elh.github.io" />
         </Suspense>
       </Canvas>
+      <span>rotate me</span>
     </div>
   );
 }
