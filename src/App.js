@@ -36,7 +36,6 @@ function App() {
           <Phone url="https://elh.github.io" />
         </Suspense>
       </Canvas>
-      <span>rotate me</span>
     </div>
   );
 }
