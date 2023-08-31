@@ -22,6 +22,9 @@ function Phone({ url }) {
 }
 
 function App() {
+  const queryParameters = new URLSearchParams(window.location.search)
+  const url = queryParameters.get("url")
+
   return (
     <div className="App">
       <Canvas
@@ -33,7 +36,7 @@ function App() {
         }}>
         <Suspense fallback={null}>
           <Environment preset="night" />
-          <Phone url="https://elh.github.io" />
+          <Phone url={url ? url : "https://elh.github.io"} />
         </Suspense>
       </Canvas>
     </div>

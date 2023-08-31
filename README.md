@@ -1,1 +1,1 @@
-# ePhone - iframe a site into a phone model
+# ePhone - iframe a site onto a phone model
