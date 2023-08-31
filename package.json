@@ -2,6 +2,14 @@
   "name": "ephone",
   "version": "0.1.0",
   "private": true,
+  "author": "elh",
+  "license": "MIT",
+  "homepage": "https://elh.github.io/ePhone",
+  "description": "Render an iframe on an iPhone model using three.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elh/ePhone.git"
+  },
   "dependencies": {
     "@react-three/drei": "^9.80.9",
     "@react-three/fiber": "^8.13.7",
@@ -16,6 +24,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "REACT_APP_USE_FIXTURES=true npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -38,5 +48,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
   }
 }
