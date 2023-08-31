@@ -30,6 +30,7 @@ function App() {
       <Canvas
         camera={{ fov: 45, position: [0, 1, 4.4] }}>
         <Suspense fallback={null}>
+          {/* <Environment preset="dawn" background blur={2} /> */}
           <Environment preset="night" />
           <Phone url={url ? url : "https://elh.github.io"} />
         </Suspense>
