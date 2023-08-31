@@ -8,6 +8,12 @@
   background-color: rgb(241, 241, 241);
 }
 
+@media (prefers-color-scheme: dark) {
+  .App {
+    background-color: rgb(10, 10, 10);
+  }
+}
+
 .iframe-wrapper iframe {
   width: 563px;
   height: 1218px;

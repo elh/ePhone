@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 
 // Phone model with an iframe rendered over the screen
 function Phone({ url }) {
+  // from market.pmnd.rs
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf")
 
   return (
