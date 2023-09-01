@@ -12,8 +12,8 @@ In the future, I want to make this a more involved 3D environment built around a
 Shout out Sam Osborne for the [tutorial](https://www.youtube.com/watch?v=SQRqU3N3ehs). As of initial spike, the only additive things I had to do were figure out the positioning values for the model I wanted to use and add occlusion.
 
 **TODO**
-- [ ] Add some info/help context
-- [ ] Add more of an environment. interactive?
+- [x] Add some info/help context (update: very basic)
 - [x] Support landscape mode
-- [ ] Manage link clicks inside iframe. Many sites will be blocked
+- [ ] Manage link clicks inside iframe? Many sites will be blocked
+- [ ] Add more of an environment. interactive?
 - [ ] Make this a lib. Could be used as a goofy Youtube player
