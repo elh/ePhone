@@ -20,3 +20,10 @@
   border: none;
   border-radius: 65px;
 }
+
+.iframe-wrapper-landscape iframe {
+  width: 1218px;
+  height: 563px;
+  border: none;
+  border-radius: 65px;
+}
