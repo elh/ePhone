@@ -31,23 +31,17 @@ function Phone({ url, landscape = false, disabled = false }) {
   const iFrameWrapperClass = landscape ? 'iframe-wrapper-landscape' : 'iframe-wrapper';
   const iFrameWrapperRot = landscape ? [0, 0, Math.PI / 2] : [0, 0, 0];
 
-  const onOffButtonPos = landscape ? [.65, -.8, 0] : [1, .65, -.1];
-  const onOffButtonRot = landscape ? [0, 0, -Math.PI / 2] : [0, 0, 0];
-
   return (
     <>
       <PresentationControls global polar={[-1, 1]}>
-        {/* TODO: does this mesh in the model tag fix need for orientation specific positioning? */}
-        {/* On/Off button */}
-        <mesh position={onOffButtonPos} rotation={onOffButtonRot} occlude onClick={
-            (_) => {if (!disabled) { setScreenOn(!screenOn)}}
-        }>
-          <boxGeometry args={[.1, .4, .2]} />
-          <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
-        </mesh>
         <primitive object={model.scene} position={modelPos} rotation={modelRot}>
-          {/* position and distanceFactor values I found for iphone-x/model.gltf */}
           {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
+          {/* On/Off button */}
+          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { setScreenOn(!screenOn)}} }>
+            <boxGeometry args={[.1, .4, .2]} />
+            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+          </mesh>
+          {/* position and distanceFactor values I found for iphone-x/model.gltf */}
           {screenOn &&
             <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.32, .091]} rotation={iFrameWrapperRot} distanceFactor={1.068} transform occlude>
                 <Suspense fallback={<div className='text-lg'>LOADING...</div>}>
