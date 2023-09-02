@@ -27,7 +27,7 @@ function Phone({ url, landscape = false }) {
         <PresentationControls global polar={[-1, 0.4]}>
           <primitive object={model.scene} position-y={0} position-x={1.2} rotation={[0, 0, Math.PI / 2]}>
             {/* position and distanceFactor values I found for iphone-x/model.gltf */}
-            <Html wrapperClass='iframe-wrapper-landscape' position={[.17, 1.32, .091]} rotation={[0, 0, -Math.PI / 2]} distanceFactor={1.068} transform occlude>
+            <Html zIndexRange={[1000000, 0]} wrapperClass='iframe-wrapper-landscape' position={[.17, 1.32, .091]} rotation={[0, 0, -Math.PI / 2]} distanceFactor={1.068} transform occlude>
               <iframe src={url} title='ePhone screen - landscape' />
             </Html>
           </primitive>
@@ -40,7 +40,7 @@ function Phone({ url, landscape = false }) {
         <PresentationControls global polar={[-1, 0.4]}>
           <primitive object={model.scene} position-y={-1.4} rotation={[-0.05, 0, 0]}>
             {/* position and distanceFactor values I found for iphone-x/model.gltf */}
-            <Html wrapperClass='iframe-wrapper' position={[.17, 1.32, .091]} distanceFactor={1.068} transform occlude>
+            <Html zIndexRange={[1000000, 0]} wrapperClass='iframe-wrapper' position={[.17, 1.32, .091]} distanceFactor={1.068} transform occlude>
               <iframe src={url} title='ePhone screen' />
             </Html>
           </primitive>
@@ -89,7 +89,7 @@ function App() {
         <br />
         {showInfo &&
           <div className="bg-base-100 p-4">
-            <input type="text" placeholder="URL" class="input input-xs input-bordered w-80 focus:outline-0" value={urlInput} onChange={
+            <input type="text" placeholder="URL" className="input input-xs input-bordered w-80 focus:outline-0" value={urlInput} onChange={
               (e) => { setUrlInput(e.target.value); }
             } onKeyDown={
               (e) => {
@@ -98,13 +98,13 @@ function App() {
                 }
               }
             } />
-            <button class="btn btn-neutral btn-xs mx-2" onClick={() => { goto(urlInput) }}>Go</button>
+            <button className="btn btn-neutral btn-xs mx-2" onClick={() => { goto(urlInput) }}>Go</button>
             <br />
-            <button class="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://en.wikipedia.org/wiki/IPhone") }}>→ Wiki</button>
-            <button class="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd") }}>→ Youtube</button>
+            <button className="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://en.wikipedia.org/wiki/IPhone") }}>→ Wiki</button>
+            <button className="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd") }}>→ Youtube</button>
             <br />
             <br />
-            <button class="btn btn-xs mr-1 my-1" onClick={rotate}>Change orientation</button>
+            <button className="btn btn-xs mr-1 my-1" onClick={rotate}>Change orientation</button>
             <span className="text-xs my-4">or drag the background to position phone.</span>
           </div>
         }
