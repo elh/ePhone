@@ -58,6 +58,14 @@ function App() {
   const [showInfo, setShowInfo] = useState(false);
 
   const rotate = () => {
+    const windowURL = new URL(window.location.href);
+    if (landscape) {
+      windowURL.searchParams.delete('landscape');
+    } else {
+      windowURL.searchParams.set('landscape', 1);
+    }
+    window.history.pushState({}, "", windowURL);
+
     setLandscape(!landscape)
   }
 
@@ -65,7 +73,12 @@ function App() {
     if (!isValidHttpUrl(url)) {
       return;
     }
-    setUrlInput(url);
+
+    const windowURL = new URL(window.location.href);
+    windowURL.searchParams.set('url', url);
+    window.history.pushState({}, "", windowURL);
+
+    setUrlInput(url); // just in case it was directly provided
     setUrl(url);
   }
 
@@ -87,7 +100,7 @@ function App() {
             } />
             <button class="btn btn-neutral btn-xs mx-2" onClick={() => { goto(urlInput) }}>Go</button>
             <br />
-            <button class="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://simple.wikipedia.org/wiki/Special:Random") }}>→ Wiki</button>
+            <button class="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://en.wikipedia.org/wiki/IPhone") }}>→ Wiki</button>
             <button class="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd") }}>→ Youtube</button>
             <br />
             <br />
