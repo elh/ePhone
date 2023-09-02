@@ -53,6 +53,7 @@ function Phone({ url, landscape = false }) {
 function App() {
   const queryParameters = new URLSearchParams(window.location.search)
   const [url, setUrl] = useState(queryParameters.get("url"));
+  const [urlInput, setUrlInput] = useState(queryParameters.get("url"));
   const [landscape, setLandscape] = useState(!!queryParameters.get("landscape"));
   const [showInfo, setShowInfo] = useState(false);
 
@@ -64,29 +65,32 @@ function App() {
     if (!isValidHttpUrl(url)) {
       return;
     }
+    setUrlInput(url);
     setUrl(url);
   }
 
   return (
     <div className="App">
       <div className='info'>
-        <button onClick={() => {setShowInfo(!showInfo)}}><Info size={20} strokeWidth={2}/></button>
-        <br/>
+        <button onClick={() => { setShowInfo(!showInfo) }}><Info size={20} strokeWidth={2} /></button>
+        <br />
         {showInfo &&
           <div className="bg-base-100 p-4">
-            <input type="text" placeholder="URL" class="input input-xs input-bordered w-80" onBlur={
+            <input type="text" placeholder="URL" class="input input-xs input-bordered w-80 focus:outline-0" value={urlInput} onChange={
+              (e) => { setUrlInput(e.target.value); }
+            } onKeyDown={
               (e) => {
-                if (e.target.value !== "") {
-                  goto(e.target.value)
+                if (e.key === 'Enter') {
+                  goto(urlInput)
                 }
               }
-            }/>
-            <button class="btn btn-neutral btn-xs mx-1">Go</button>
-            <br/>
-            <button class="btn btn-xs mr-1" onClick={() => {goto("https://simple.wikipedia.org/wiki/Special:Random")}}>→ Wiki</button>
-            <button class="btn btn-xs mr-1" onClick={() => {goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd")}}>→ Youtube</button>
-            <br/>
-            <br/>
+            } />
+            <button class="btn btn-neutral btn-xs mx-2" onClick={() => { goto(urlInput) }}>Go</button>
+            <br />
+            <button class="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://simple.wikipedia.org/wiki/Special:Random") }}>→ Wiki</button>
+            <button class="btn btn-xs mr-1 mt-1" onClick={() => { goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd") }}>→ Youtube</button>
+            <br />
+            <br />
             <button class="btn btn-xs mr-1 my-1" onClick={rotate}>Change orientation</button>
             <span className="text-xs my-4">or drag the background to position phone.</span>
           </div>
