@@ -4,6 +4,7 @@ import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera } f
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
 import { Info, Github } from 'lucide-react';
+import {isMobile} from 'react-device-detect';
 
 function isValidHttpUrl(string) {
   let url;
@@ -17,37 +18,31 @@ function isValidHttpUrl(string) {
 }
 
 // Phone model with an iframe rendered over the screen
-function Phone({ url, landscape = false }) {
+// Supports portrait and landscape orientations
+function Phone({ url, landscape = false, screenOff = false }) {
   // from market.pmnd.rs
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
 
-  if (landscape) {
-    return (
-      <>
-        <PresentationControls global polar={[-1, 0.4]}>
-          <primitive object={model.scene} position-y={0} position-x={1.2} rotation={[0, 0, Math.PI / 2]}>
-            {/* position and distanceFactor values I found for iphone-x/model.gltf */}
-            <Html zIndexRange={[1000000, 0]} wrapperClass='iframe-wrapper-landscape' position={[.17, 1.32, .091]} rotation={[0, 0, -Math.PI / 2]} distanceFactor={1.068} transform occlude>
-              <iframe src={url} title='ePhone screen - landscape' />
-            </Html>
-          </primitive>
-        </PresentationControls>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <PresentationControls global polar={[-1, 0.4]}>
-          <primitive object={model.scene} position-y={-1.4} rotation={[-0.05, 0, 0]}>
-            {/* position and distanceFactor values I found for iphone-x/model.gltf */}
-            <Html zIndexRange={[1000000, 0]} wrapperClass='iframe-wrapper' position={[.17, 1.32, .091]} distanceFactor={1.068} transform occlude>
+  // phone orientation
+  const modelPos = landscape ? [-1.4, 0, 0] : [0, -1.4, 0];
+  const modelRot = landscape ? [0, 0, -Math.PI / 2] : [-0.05, 0, 0];
+  const iFrameWrapperClass = landscape ? 'iframe-wrapper-landscape' : 'iframe-wrapper';
+  const iFrameWrapperRot = landscape ? [0, 0, Math.PI / 2] : [0, 0, 0];
+
+  return (
+    <>
+      <PresentationControls global polar={[-1, 0.4]}>
+        <primitive object={model.scene} position={modelPos} rotation={modelRot}>
+          {/* position and distanceFactor values I found for iphone-x/model.gltf */}
+          {!screenOff &&
+            <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.32, .091]} rotation={iFrameWrapperRot} distanceFactor={1.068} transform occlude>
               <iframe src={url} title='ePhone screen' />
             </Html>
-          </primitive>
-        </PresentationControls>
-      </>
-    );
-  }
+          }
+        </primitive>
+      </PresentationControls>
+    </>
+  );
 }
 
 function App() {
@@ -116,7 +111,8 @@ function App() {
         <Suspense fallback={null}>
           <PerspectiveCamera makeDefault fov={45} position={landscape ? [-.1, .1, 3.4] : [0, -.1, 4.5]} />
           <Environment preset="night" />
-          <Phone url={url ? url : "https://elh.github.io"} landscape={!!landscape} />
+          {/* If detected to be on mobile, don't iframe. Positioning is currently off and it's a bad experience anyways on a small screen */}
+          <Phone url={url ? url : "https://elh.github.io"} landscape={!!landscape} screenOff={isMobile} />
         </Suspense>
       </Canvas>
     </div>
