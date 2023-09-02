@@ -20,7 +20,7 @@ function isValidHttpUrl(string) {
 // Phone model with an iframe rendered over the screen
 // Supports portrait and landscape orientations
 function Phone({ url, landscape = false, disabled = false }) {
-  const [screenOn, setScreenOn] = useState(!disabled);
+  const [screenOn, setScreenOn] = useState(false);
 
   // from market.pmnd.rs
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
@@ -37,8 +37,11 @@ function Phone({ url, landscape = false, disabled = false }) {
   return (
     <>
       <PresentationControls global polar={[-1, 0.4]}>
+        {/* TODO: does this mesh in the model tag fix need for orientation specific positioning? */}
         {/* On/Off button */}
-        <mesh position={onOffButtonPos} rotation={onOffButtonRot} occlude onClick={(_) => setScreenOn(!screenOn)}>
+        <mesh position={onOffButtonPos} rotation={onOffButtonRot} occlude onClick={
+            (_) => {if (!disabled) { setScreenOn(!screenOn)}}
+        }>
           <boxGeometry args={[.1, .4, .2]} />
           <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
         </mesh>
@@ -47,7 +50,16 @@ function Phone({ url, landscape = false, disabled = false }) {
           {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
           {screenOn &&
             <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.32, .091]} rotation={iFrameWrapperRot} distanceFactor={1.068} transform occlude>
-              <iframe src={url} title='ePhone screen' />
+                <Suspense fallback={<div className='text-lg'>LOADING...</div>}>
+                  <iframe src={url} title='ePhone screen' />
+                </Suspense>
+              </Html>
+          }
+          {!screenOn && !disabled &&
+            <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
+              <div className="text-xs bg-sky-400 text-white rounded-md p-1">
+                ← turn on
+              </div>
             </Html>
           }
         </primitive>
@@ -116,7 +128,6 @@ function App() {
             <button className="btn btn-xs mr-1 my-1" onClick={rotate}>Change orientation</button>
             <span className="text-xs my-4">or drag the background to position phone.</span>
             <br />
-            <span className="text-xs my-4">Some phone buttons are clickable 👀</span>
           </div>
         }
       </div>

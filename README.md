@@ -15,6 +15,6 @@ Shout out Sam Osborne for the [tutorial](https://www.youtube.com/watch?v=SQRqU3N
 **TODO**
 - [x] Add some info/help context (update: very basic)
 - [x] Support landscape mode
-- [ ] Manage link clicks inside iframe? Many sites will be blocked
+- [ ] Manage link clicks inside iframe? Many sites will be blocked (Update: Mitigated this a bit on my own website)
 - [ ] Add more of an environment. interactive?
 - [ ] Make this a lib. Could be used as a goofy Youtube player
