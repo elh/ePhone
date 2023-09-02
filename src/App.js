@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Environment, PresentationControls, useGLTF, Html } from '@react-three/drei';
+import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
 
@@ -54,8 +54,6 @@ function App() {
   const [url, setUrl] = useState(queryParameters.get("url"));
   const [landscape, setLandscape] = useState(!!queryParameters.get("landscape"));
 
-  const cameraPos = landscape ? [0, -0.3, 3.3] : [0, 1, 4.4];
-
   const rotate = () => {
     setLandscape(!landscape)
   }
@@ -82,11 +80,12 @@ function App() {
         &nbsp;—&nbsp;
         <button onClick={() => {goto("https://simple.wikipedia.org/wiki/Special:Random")}}>Wiki</button>
         <button onClick={() => {goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd")}}>Youtube</button>
+        <br/>
+        <span>Drag to position. </span>
       </div>
-      <Canvas
-        camera={{ fov: 45, position: cameraPos }}>
+      <Canvas>
         <Suspense fallback={null}>
-          {/* <Environment preset="dawn" background blur={2} /> */}
+          <PerspectiveCamera makeDefault fov={45} position={landscape ? [-.1, .1, 3.4] : [0, -.1, 4.5]} />
           <Environment preset="night" />
           <Phone url={url ? url : "https://elh.github.io"} landscape={!!landscape} />
         </Suspense>
