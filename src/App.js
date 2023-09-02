@@ -3,6 +3,7 @@ import './App.css';
 import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
+import { Info, Github } from 'lucide-react';
 
 function isValidHttpUrl(string) {
   let url;
@@ -53,6 +54,7 @@ function App() {
   const queryParameters = new URLSearchParams(window.location.search)
   const [url, setUrl] = useState(queryParameters.get("url"));
   const [landscape, setLandscape] = useState(!!queryParameters.get("landscape"));
+  const [showInfo, setShowInfo] = useState(false);
 
   const rotate = () => {
     setLandscape(!landscape)
@@ -68,20 +70,30 @@ function App() {
   return (
     <div className="App">
       <div className='info'>
-        <input type='text' placeholder='URL to load' onBlur={
-          (e) => {
-            if (e.target.value !== "") {
-              goto(e.target.value)
-            }
-          }
-        }/>
-        &nbsp;—&nbsp;
-        <button onClick={rotate}>Rotate</button>
-        &nbsp;—&nbsp;
-        <button onClick={() => {goto("https://simple.wikipedia.org/wiki/Special:Random")}}>Wiki</button>
-        <button onClick={() => {goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd")}}>Youtube</button>
+        <button onClick={() => {setShowInfo(!showInfo)}}><Info size={20} strokeWidth={2}/></button>
         <br/>
-        <span>Drag to position. </span>
+        {showInfo &&
+          <div className="bg-base-100 p-4">
+            <input type="text" placeholder="URL" class="input input-xs input-bordered w-80" onBlur={
+              (e) => {
+                if (e.target.value !== "") {
+                  goto(e.target.value)
+                }
+              }
+            }/>
+            <button class="btn btn-neutral btn-xs mx-1">Go</button>
+            <br/>
+            <button class="btn btn-xs mr-1" onClick={() => {goto("https://simple.wikipedia.org/wiki/Special:Random")}}>→ Wiki</button>
+            <button class="btn btn-xs mr-1" onClick={() => {goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd")}}>→ Youtube</button>
+            <br/>
+            <br/>
+            <button class="btn btn-xs mr-1 my-1" onClick={rotate}>Change orientation</button>
+            <span className="text-xs my-4">or drag the background to position phone.</span>
+          </div>
+        }
+      </div>
+      <div className='links'>
+        <a href={`https://github.com/elh/ePhone`} className="link link-hover"><Github size={20} strokeWidth={2} /></a>
       </div>
       <Canvas>
         <Suspense fallback={null}>
