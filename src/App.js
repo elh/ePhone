@@ -20,6 +20,8 @@ function isValidHttpUrl(string) {
 // Phone model with an iframe rendered over the screen
 // Supports portrait and landscape orientations
 function Phone({ url, landscape = false, disabled = false }) {
+  const [screenOn, setScreenOn] = useState(!disabled);
+
   // from market.pmnd.rs
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
 
@@ -29,12 +31,21 @@ function Phone({ url, landscape = false, disabled = false }) {
   const iFrameWrapperClass = landscape ? 'iframe-wrapper-landscape' : 'iframe-wrapper';
   const iFrameWrapperRot = landscape ? [0, 0, Math.PI / 2] : [0, 0, 0];
 
+  const onOffButtonPos = landscape ? [.65, -.8, 0] : [1, .65, -.1];
+  const onOffButtonRot = landscape ? [0, 0, -Math.PI / 2] : [0, 0, 0];
+
   return (
     <>
       <PresentationControls global polar={[-1, 0.4]}>
+        {/* On/Off button */}
+        <mesh position={onOffButtonPos} rotation={onOffButtonRot} occlude onClick={(_) => setScreenOn(!screenOn)}>
+          <boxGeometry args={[.1, .4, .2]} />
+          <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+        </mesh>
         <primitive object={model.scene} position={modelPos} rotation={modelRot}>
           {/* position and distanceFactor values I found for iphone-x/model.gltf */}
-          {!disabled &&
+          {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
+          {screenOn &&
             <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.32, .091]} rotation={iFrameWrapperRot} distanceFactor={1.068} transform occlude>
               <iframe src={url} title='ePhone screen' />
             </Html>
@@ -104,6 +115,8 @@ function App() {
             <br />
             <button className="btn btn-xs mr-1 my-1" onClick={rotate}>Change orientation</button>
             <span className="text-xs my-4">or drag the background to position phone.</span>
+            <br />
+            <span className="text-xs my-4">Some phone buttons are clickable 👀</span>
           </div>
         }
       </div>
@@ -115,6 +128,7 @@ function App() {
         <Suspense fallback={null}>
           <PerspectiveCamera makeDefault fov={45} position={cameraPos} />
           <Environment preset="night" />
+          {/* <ambientLight intensity={0.3} /> */}
           {/* If detected to be on mobile, don't iframe. Positioning is currently off and it's a bad experience anyways on a small screen */}
           <Phone url={url ? url : "https://elh.github.io"} landscape={!!landscape} disabled={isMobile} />
         </Suspense>

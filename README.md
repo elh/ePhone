@@ -1,9 +1,10 @@
 # ePhone - iframe a site onto a phone model
 
-Built with `@react-three/fiber`. Drag to rotate the phone model.
-
+Use the info menu to navigate to a site. Flip phone orientation or drag the background to position the phone as desired. Some phone buttons are clickable.
 * `url` query parameter can be used to specify the site to iframe.
 * `landscape` query parameter can be used to rotate the phone. This works well with Youtube embeds.
+
+Built with `@react-three/fiber`.
 
 ![Demo of navigating websites using a 3D model phone](ephone.gif)
 
