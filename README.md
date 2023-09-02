@@ -5,7 +5,7 @@ Built with `@react-three/fiber`. Drag to rotate the phone model.
 * `url` query parameter can be used to specify the site to iframe.
 * `landscape` query parameter can be used to rotate the phone. This works well with Youtube embeds.
 
-![Wikipedia iframed onto a phone model](example.png)
+![Demo of navigating websites using a 3D model phone](ephone.gif)
 
 In the future, I want to make this a more involved 3D environment built around an iframe, but satisfied for a very quick hack and my first dabble with Three.js.
 
