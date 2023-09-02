@@ -36,7 +36,7 @@ function Phone({ url, landscape = false, disabled = false }) {
 
   return (
     <>
-      <PresentationControls global polar={[-1, 0.4]}>
+      <PresentationControls global polar={[-1, 1]}>
         {/* TODO: does this mesh in the model tag fix need for orientation specific positioning? */}
         {/* On/Off button */}
         <mesh position={onOffButtonPos} rotation={onOffButtonRot} occlude onClick={
@@ -109,7 +109,7 @@ function App() {
         <button onClick={() => { setShowInfo(!showInfo) }}><Info size={20} strokeWidth={2} /></button>
         <br />
         {showInfo &&
-          <div className="bg-base-100 p-4">
+          <div className="bg-base-100 p-4 rounded-md">
             <input type="text" placeholder="URL" className="input input-xs input-bordered w-80 focus:outline-0" value={urlInput} disabled={isMobile} onChange={
               (e) => { setUrlInput(e.target.value); }
             } onKeyDown={
