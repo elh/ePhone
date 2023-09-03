@@ -66,7 +66,7 @@ function Phone({ url, landscape = false, disabled = false }) {
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Sim card */}
-          <mesh position={[1, 1.43, 0]} occlude>
+          <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => {window.open("https://github.com/elh", "_blank");} }>
             <boxGeometry args={[.1, .35, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
@@ -81,13 +81,18 @@ function Phone({ url, landscape = false, disabled = false }) {
           {!disabled && labelsOn &&
             <>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
-                <div className="text-xs bg-sky-400 text-white rounded-md p-1">
+                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
                   ← turn {screenOn ? "off" : "on"}
                 </div>
               </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.95, 2.53, 0]} transform occlude>
-                <div className="text-xs bg-sky-400 text-white rounded-md p-1">
+                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
                   {labelsOn ? "hide" : "show"} labels →
+                </div>
+              </Html>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.3, 1.45, 0]} transform occlude>
+                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                ← identity <Github size={14} strokeWidth={2} />
                 </div>
               </Html>
             </>
