@@ -96,33 +96,33 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                 <>
                   {landscape
                     ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.14, 2.88, 0]} transform occlude>
-                        <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
-                          Portrait <CornerRightUp size={14} strokeWidth={2} />
+                        <div className="btn btn-xs font-normal bg-primary" onClick={() => {rotateFn()}}>
+                          Portrait<CornerRightUp size={12} strokeWidth={2.5} />
                         </div>
                       </Html>
                     : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.30, 2.95, 0]} transform occlude>
-                        <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
-                          <CornerRightDown size={14} strokeWidth={2} /> Landscape
+                        <div className="btn btn-xs font-normal bg-primary" onClick={() => {rotateFn()}}>
+                          <CornerRightDown size={12} strokeWidth={2.5} />Landscape
                         </div>
                       </Html>
                   }
                   <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
-                    <div className="text-xs rounded-md px-2 py-1 border border-primary">
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
                       {landscape ? "" : "← "}Turn {screenOn ? "off" : "on"}
                     </div>
                   </Html>
                   <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
-                    <div className="text-xs rounded-md px-2 py-1 border border-primary">
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
                     {landscape ? "" : "← "}Owner?
                     </div>
                   </Html>
                   <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
-                    <div className="text-xs rounded-md px-2 py-1 border border-primary">
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
                       {labelsOn ? "Hide" : "Show"} labels{landscape ? "" : " →"}
                     </div>
                   </Html>
                   <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
-                    <div className="p-4 rounded-md border border-primary">
+                    <div className="p-4 rounded-md border border-primary bg-black">
                       <span className="text-lg font-black">ePhone browser</span>
                       <br />
                       <span className="text-xs">Drag the background to rotate the phone and click buttons to use it.</span>
@@ -134,12 +134,12 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                           (e) => { setUrlInput(e.target.value); }
                         }
                       />
-                      <button className="btn btn-xs mx-1" onClick={() => { gotoFn(urlInput) }}>Go</button>
+                      <button className="btn btn-xs mx-1 bg-primary" onClick={() => { gotoFn(urlInput) }}>Go</button>
                       <br />
-                      <button className="btn btn-xs font-normal mr-1 mt-1"
+                      <button className="btn btn-xs font-normal mr-1 mt-1 bg-primary"
                         onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
                       >→ Wiki</button>
-                      <button className="btn btn-xs font-normal mr-1 mt-1"
+                      <button className="btn btn-xs font-normal mr-1 mt-1 bg-primary"
                         onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
                       >→ Youtube</button>
                     </div>
@@ -150,7 +150,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                 <>
                   <primitive object={flashlightTarget} position={[0, 0, -50]} />
                   <SpotLight
-                    position={[.7, 2.6, -.10]}
+                    position={[.7, 2.57, -.10]}
                     target={flashlightTarget}
                     distance={10}
                     angle={0.45}

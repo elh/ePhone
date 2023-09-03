@@ -6,7 +6,7 @@ Use the info menu to navigate to a site. Flip phone orientation or drag the back
 
 Built with `@react-three/fiber`.
 
-![Demo of navigating websites using a 3D model phone](ephone.gif)
+![The ePhone](ephone.png)
 
 In the future, I want to make this a more involved 3D environment built around an iframe, but satisfied for a very quick hack and my first dabble with Three.js.
 
