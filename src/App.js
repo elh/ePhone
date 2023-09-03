@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import * as THREE from 'three';
 import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, SpotLight } from '@react-three/drei';
@@ -29,6 +29,8 @@ function Phone({ url, landscape = false, disabled = false }) {
   // sounds
   const notifUp = new Audio(process.env.PUBLIC_URL + "/notif_up.m4a");
   const notifDown = new Audio(process.env.PUBLIC_URL + "/notif_down.m4a");
+  const click = new Audio(process.env.PUBLIC_URL + "/click.mp3");
+  click.volume = 0.3;
 
   // from market.pmnd.rs
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
@@ -45,12 +47,12 @@ function Phone({ url, landscape = false, disabled = false }) {
         <primitive object={model.scene} position={modelPos} rotation={modelRot}>
           {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
           {/* On/Off button */}
-          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { setScreenOn(!screenOn) }} }>
+          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setScreenOn(!screenOn) }} }>
             <boxGeometry args={[.1, .4, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Ring/silent switch */}
-          <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => {if (!disabled) { setLabelsOn(!labelsOn) }} }>
+          <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setLabelsOn(!labelsOn) }} }>
             <boxGeometry args={[.1, .12, .15]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
@@ -70,7 +72,7 @@ function Phone({ url, landscape = false, disabled = false }) {
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Sim card */}
-          <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => {window.open("https://github.com/elh", "_blank");} }>
+          <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => { click.play(); window.open("https://github.com/elh", "_blank") } }>
             <boxGeometry args={[.1, .35, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
@@ -99,7 +101,7 @@ function Phone({ url, landscape = false, disabled = false }) {
                   {labelsOn ? "hide" : "show"} labels →
                 </div>
               </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 2.18, 0]} transform occlude>
+              {/* <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 2.18, 0]} transform occlude>
                 <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
                   beep →
                 </div>
@@ -108,7 +110,7 @@ function Phone({ url, landscape = false, disabled = false }) {
                 <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
                   boop →
                 </div>
-              </Html>
+              </Html> */}
             </>
           }
           {flashlightOn &&
