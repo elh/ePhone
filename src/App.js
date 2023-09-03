@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import * as THREE from 'three';
 import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, SpotLight } from '@react-three/drei';
@@ -128,54 +128,29 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
                   boop →
                 </div>
               </Html> */}
-              {landscape
-                ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[-1.07, 0.52, 0]} transform occlude>
-                    <div className="bg-sky-400 p-4 rounded-md">
-                      <span className="text-lg font-black text-white">ePhone browser</span>
-                      <br />
-                      <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
-                      <br />
-                      <br />
-                      <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
-                        value={urlInput}
-                        onChange={
-                          (e) => { setUrlInput(e.target.value); }
-                        }
-                      />
-                      <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
-                      <br />
-                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
-                        onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
-                      >→ Wiki</button>
-                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
-                        onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
-                      >→ Youtube</button>
-                    </div>
-                  </Html>
-                : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-1.65, 1.4, 0]} transform occlude>
-                    <div className="bg-sky-400 p-4 rounded-md">
-                      <span className="text-lg font-black text-white">ePhone browser</span>
-                      <br />
-                      <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
-                      <br />
-                      <br />
-                      <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
-                        value={urlInput}
-                        onChange={
-                          (e) => { setUrlInput(e.target.value); }
-                        }
-                      />
-                      <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
-                      <br />
-                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
-                        onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
-                      >→ Wiki</button>
-                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
-                        onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
-                      >→ Youtube</button>
-                    </div>
-                  </Html>
-                }
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
+                <div className="bg-sky-400 p-4 rounded-md">
+                  <span className="text-lg font-black text-white">ePhone browser</span>
+                  <br />
+                  <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
+                  <br />
+                  <br />
+                  <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
+                    value={urlInput}
+                    onChange={
+                      (e) => { setUrlInput(e.target.value); }
+                    }
+                  />
+                  <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
+                  <br />
+                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                    onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
+                  >→ Wiki</button>
+                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                    onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
+                  >→ Youtube</button>
+                </div>
+              </Html>
             </>
           }
           {flashlightOn &&
@@ -202,9 +177,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
 function App() {
   const queryParameters = new URLSearchParams(window.location.search)
   const [url, setUrl] = useState(queryParameters.get("url"));
-  // const [urlInput, setUrlInput] = useState(queryParameters.get("url"));
   const [landscape, setLandscape] = useState(!!queryParameters.get("landscape"));
-  // const [showInfo, setShowInfo] = useState(false);
 
   const baseCameraPos = landscape ? [-.1, .1, 3.4] : [0, -.1, 4.5];
   const cameraPos = isMobile ? (landscape ? [0, 0, 12] : [0, 0, 7]) : baseCameraPos;
@@ -225,43 +198,15 @@ function App() {
     if (!isValidHttpUrl(url)) {
       return;
     }
-
     const windowURL = new URL(window.location.href);
     windowURL.searchParams.set('url', url);
     window.history.pushState({}, "", windowURL);
 
-    // setUrlInput(url); // just in case it was directly provided
     setUrl(url);
   }
 
   return (
     <div className="App">
-      {/* <div className='info'>
-        <button onClick={() => { setShowInfo(!showInfo) }}><Info size={20} strokeWidth={2} /></button>
-        <br />
-        {showInfo &&
-          <div className="bg-base-100 p-4 rounded-md">
-            <input type="text" placeholder="URL" className="input input-xs input-bordered w-80 focus:outline-0" value={urlInput} disabled={isMobile} onChange={
-              (e) => { setUrlInput(e.target.value); }
-            } onKeyDown={
-              (e) => {
-                if (e.key === 'Enter') {
-                  goto(urlInput)
-                }
-              }
-            } />
-            <button className="btn btn-neutral btn-xs mx-2" disabled={isMobile} onClick={() => { goto(urlInput) }}>Go</button>
-            <br />
-            <button className="btn btn-xs mr-1 mt-1" disabled={isMobile} onClick={() => { goto("https://en.wikipedia.org/wiki/IPhone") }}>→ Wiki</button>
-            <button className="btn btn-xs mr-1 mt-1" disabled={isMobile} onClick={() => { goto("https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd") }}>→ Youtube</button>
-            <br />
-            <br />
-            <button className="btn btn-xs mr-1 my-1" onClick={rotate}>Change orientation</button>
-            <span className="text-xs my-4">or drag the background to position phone.</span>
-            <br />
-          </div>
-        }
-      </div> */}
       {isMobile && <div className="p-4 text-center text-sm italic">Open on desktop to turn on the ePhone</div>}
       <div className='links'>
         <a href={`https://github.com/elh/ePhone`} className="link link-hover"><Github size={20} strokeWidth={2} /></a>
