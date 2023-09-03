@@ -20,13 +20,12 @@ function isValidHttpUrl(string) {
 
 // Phone model with an iframe rendered over the screen
 // Supports portrait and landscape orientations
-function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
-  const [labelsOn, setLabelsOn] = useState(true);
-  const [screenOn, setScreenOn] = useState(false);
+function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off = false, hide = false }) {
+  const [labelsOn, setLabelsOn] = useState(!hide);
+  const [screenOn, setScreenOn] = useState(!off);
   const [urlInput, setUrlInput] = useState(url);
   const [flashlightOn, setFlashlightOn] = useState(false);
   const [flashlightTarget] = useState(() => new THREE.Object3D());
-  const [neverOn, setNeverOn] = useState(true);
 
   // sounds
   const notifUp = new Audio(process.env.PUBLIC_URL + "/notif_up.m4a");
@@ -54,7 +53,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
         <primitive object={model.scene} position={modelPos} rotation={modelRot}>
           {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
           {/* On/Off button */}
-          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setScreenOn(!screenOn); setNeverOn(false); }} }>
+          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setScreenOn(!screenOn); }} }>
             <boxGeometry args={[.1, .4, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
@@ -99,25 +98,25 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
                       Portrait <CornerRightUp size={14} strokeWidth={2} />
                     </div>
                   </Html>
-                : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.28, 2.95, 0]} transform occlude>
+                : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.30, 2.95, 0]} transform occlude>
                     <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
                       <CornerRightDown size={14} strokeWidth={2} /> Landscape
                     </div>
                   </Html>
               }
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.28, 2.05, 0]} transform occlude>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
                 <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  {landscape ? "" : "← "}turn {screenOn ? "off" : "on"}{neverOn ? " 👋" : ""}
+                  {landscape ? "" : "← "}Turn {screenOn ? "off" : "on"}
                 </div>
               </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
                 <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                {landscape ? "" : "← "}owner?
+                {landscape ? "" : "← "}Owner?
                 </div>
               </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
                 <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  {labelsOn ? "hide" : "show"} labels{landscape ? "" : " →"}
+                  {labelsOn ? "Hide" : "Show"} labels{landscape ? "" : " →"}
                 </div>
               </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
@@ -170,6 +169,8 @@ function App() {
   const queryParameters = new URLSearchParams(window.location.search)
   const [url, setUrl] = useState(queryParameters.get("url"));
   const [landscape, setLandscape] = useState(!!queryParameters.get("landscape"));
+  const [off] = useState(!!queryParameters.get("off")); // only used to set initial state
+  const [hide] = useState(!!queryParameters.get("hide")); // only used to set initial state. hidden labels
 
   const baseCameraPos = landscape ? [-.1, .1, 3.4] : [0, -.1, 4.5];
   const cameraPos = isMobile ? (landscape ? [0, 0, 12] : [0, 0, 7]) : baseCameraPos;
@@ -209,7 +210,15 @@ function App() {
           <Environment preset="night" />
           {/* <ambientLight intensity={0.3} /> */}
           {/* If detected to be on mobile, don't iframe. Positioning is currently off and it's a bad experience anyways on a small screen */}
-          <Phone url={url ? url : "https://elh.github.io"} landscape={!!landscape} disabled={isMobile} rotateFn={rotate} gotoFn={goto} />
+          <Phone
+            url={url ? url : "https://elh.github.io"}
+            landscape={!!landscape}
+            disabled={isMobile}
+            rotateFn={rotate}
+            gotoFn={goto}
+            off={off}
+            hide={hide}
+          />
         </Suspense>
       </Canvas>
     </div>
