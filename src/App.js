@@ -41,6 +41,26 @@ function Phone({ url, landscape = false, disabled = false }) {
             <boxGeometry args={[.1, .4, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
+          {/* Ring/silent switch */}
+          <mesh position={[-.7, 2.52, 0]} occlude>
+            <boxGeometry args={[.1, .12, .15]} />
+            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+          </mesh>
+          {/* Up volume button */}
+          <mesh position={[-.7, 2.18, 0]} occlude>
+            <boxGeometry args={[.1, .24, .15]} />
+            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+          </mesh>
+          {/* Down volume button */}
+          <mesh position={[-.7, 1.86, 0]} occlude>
+            <boxGeometry args={[.1, .24, .15]} />
+            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+          </mesh>
+          {/* Flashlight */}
+          <mesh position={[.7, 2.6, -.15]} occlude>
+            <boxGeometry args={[.24, .5, .10]} />
+            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+          </mesh>
           {/* position and distanceFactor values I found for iphone-x/model.gltf */}
           {screenOn &&
             <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.33, .091]} rotation={iFrameWrapperRot} distanceFactor={1.28} transform occlude>
