@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import * as THREE from 'three';
-import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, SpotLight, useDepthBuffer } from '@react-three/drei';
+import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, SpotLight } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
 import { Info, Github } from 'lucide-react';
@@ -26,6 +26,10 @@ function Phone({ url, landscape = false, disabled = false }) {
   const [flashlightOn, setFlashlightOn] = useState(false);
   const [flashlightTarget] = useState(() => new THREE.Object3D());
 
+  // sounds
+  const notifUp = new Audio(process.env.PUBLIC_URL + "/notif_up.m4a");
+  const notifDown = new Audio(process.env.PUBLIC_URL + "/notif_down.m4a");
+
   // from market.pmnd.rs
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
 
@@ -41,27 +45,27 @@ function Phone({ url, landscape = false, disabled = false }) {
         <primitive object={model.scene} position={modelPos} rotation={modelRot}>
           {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
           {/* On/Off button */}
-          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { setScreenOn(!screenOn)}} }>
+          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { setScreenOn(!screenOn) }} }>
             <boxGeometry args={[.1, .4, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Ring/silent switch */}
-          <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => {if (!disabled) { setLabelsOn(!labelsOn)}} }>
+          <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => {if (!disabled) { setLabelsOn(!labelsOn) }} }>
             <boxGeometry args={[.1, .12, .15]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Up volume button */}
-          <mesh position={[-.7, 2.18, 0]} occlude>
+          <mesh position={[-.7, 2.18, 0]} occlude onClick={ (_) => {if (!disabled) { notifUp.play() }} }>
             <boxGeometry args={[.1, .24, .15]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Down volume button */}
-          <mesh position={[-.7, 1.86, 0]} occlude>
+          <mesh position={[-.7, 1.86, 0]} occlude onClick={ (_) => {if (!disabled) { notifDown.play() }} }>
             <boxGeometry args={[.1, .24, .15]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Flashlight */}
-          <mesh position={[.7, 2.6, -.10]} occlude onClick={ (_) => {if (!disabled) { setFlashlightOn(!flashlightOn)}} }>
+          <mesh position={[.7, 2.6, -.10]} occlude onClick={ (_) => {if (!disabled) { setFlashlightOn(!flashlightOn) }} }>
             <boxGeometry args={[.24, .5, .03]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
@@ -85,14 +89,24 @@ function Phone({ url, landscape = false, disabled = false }) {
                   ← turn {screenOn ? "off" : "on"}
                 </div>
               </Html>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.3, 1.45, 0]} transform occlude>
+                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                ← identity <Github size={14} strokeWidth={2} />
+                </div>
+              </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.95, 2.53, 0]} transform occlude>
                 <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
                   {labelsOn ? "hide" : "show"} labels →
                 </div>
               </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.3, 1.45, 0]} transform occlude>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 2.18, 0]} transform occlude>
                 <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
-                ← identity <Github size={14} strokeWidth={2} />
+                  beep →
+                </div>
+              </Html>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 1.87, 0]} transform occlude>
+                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                  boop →
                 </div>
               </Html>
             </>
