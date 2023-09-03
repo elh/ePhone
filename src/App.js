@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, SpotLight } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
-import { Github, CornerRightDown } from 'lucide-react';
+import { Github, CornerRightDown, CornerRightUp } from 'lucide-react';
 import {isMobile} from 'react-device-detect';
 
 function isValidHttpUrl(string) {
@@ -37,7 +37,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
 
   // phone orientation
-  const modelPos = landscape ? [-1.4, .2, 0] : [0, -1.4, 0];
+  const modelPos = landscape ? [-1.4, 0, 0] : [0, -1.4, 0];
   const modelRot = landscape ? [0, 0, -Math.PI / 2] : [-0.05, 0, 0];
   const iFrameWrapperClass = landscape ? 'iframe-wrapper-landscape' : 'iframe-wrapper';
   const iFrameWrapperRot = landscape ? [0, 0, Math.PI / 2] : [0, 0, 0];
@@ -91,11 +91,18 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
           }
           {!disabled && labelsOn &&
             <>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.28, 2.95, 0]} transform occlude>
-                <div className="text-sm rounded-md px-2 py-1" onClick={() => {rotateFn()}}>
-                  <CornerRightDown size={14} strokeWidth={2} /> Landscape
-                </div>
-              </Html>
+              {landscape
+                ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.16, 2.88, 0]} transform occlude>
+                    <div className="text-sm rounded-md px-2 py-1 border-2 border-primary" onClick={() => {rotateFn()}}>
+                      Portrait <CornerRightUp size={14} strokeWidth={2} />
+                    </div>
+                  </Html>
+                : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.28, 2.95, 0]} transform occlude>
+                    <div className="text-sm rounded-md px-2 py-1 border-2 border-primary" onClick={() => {rotateFn()}}>
+                      <CornerRightDown size={14} strokeWidth={2} /> Landscape
+                    </div>
+                  </Html>
+              }
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
                 <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
                   ← turn {screenOn ? "off" : "on"}
@@ -121,29 +128,54 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
                   boop →
                 </div>
               </Html> */}
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-1.65, 1.4, 0]} transform occlude>
-                <div className="bg-sky-400 p-4 rounded-md">
-                  <span className="text-lg font-black text-white">ePhone browser</span>
-                  <br />
-                  <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
-                  <br />
-                  <br />
-                  <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
-                    value={urlInput}
-                    onChange={
-                      (e) => { setUrlInput(e.target.value); }
-                    }
-                  />
-                  <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
-                  <br />
-                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
-                    onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
-                  >→ Wiki</button>
-                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
-                    onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
-                  >→ Youtube</button>
-                </div>
-              </Html>
+              {landscape
+                ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[-1.07, 0.52, 0]} transform occlude>
+                    <div className="bg-sky-400 p-4 rounded-md">
+                      <span className="text-lg font-black text-white">ePhone browser</span>
+                      <br />
+                      <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
+                      <br />
+                      <br />
+                      <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
+                        value={urlInput}
+                        onChange={
+                          (e) => { setUrlInput(e.target.value); }
+                        }
+                      />
+                      <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
+                      <br />
+                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                        onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
+                      >→ Wiki</button>
+                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                        onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
+                      >→ Youtube</button>
+                    </div>
+                  </Html>
+                : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-1.65, 1.4, 0]} transform occlude>
+                    <div className="bg-sky-400 p-4 rounded-md">
+                      <span className="text-lg font-black text-white">ePhone browser</span>
+                      <br />
+                      <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
+                      <br />
+                      <br />
+                      <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
+                        value={urlInput}
+                        onChange={
+                          (e) => { setUrlInput(e.target.value); }
+                        }
+                      />
+                      <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
+                      <br />
+                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                        onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
+                      >→ Wiki</button>
+                      <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                        onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
+                      >→ Youtube</button>
+                    </div>
+                  </Html>
+                }
             </>
           }
           {flashlightOn &&
