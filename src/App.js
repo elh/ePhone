@@ -93,60 +93,60 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
             <>
               {landscape
                 ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.16, 2.88, 0]} transform occlude>
-                    <div className="text-sm rounded-md px-2 py-1 border-2 border-primary" onClick={() => {rotateFn()}}>
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
                       Portrait <CornerRightUp size={14} strokeWidth={2} />
                     </div>
                   </Html>
                 : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.28, 2.95, 0]} transform occlude>
-                    <div className="text-sm rounded-md px-2 py-1 border-2 border-primary" onClick={() => {rotateFn()}}>
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
                       <CornerRightDown size={14} strokeWidth={2} /> Landscape
                     </div>
                   </Html>
               }
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
-                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                <div className="text-xs rounded-md px-2 py-1 border border-primary">
                   ← turn {screenOn ? "off" : "on"}
                 </div>
               </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.3, 1.45, 0]} transform occlude>
-                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                <div className="text-xs rounded-md px-2 py-1 border border-primary">
                 ← identity <Github size={14} strokeWidth={2} />
                 </div>
               </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.95, 2.53, 0]} transform occlude>
-                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                <div className="text-xs rounded-md px-2 py-1 border border-primary">
                   {labelsOn ? "hide" : "show"} labels →
                 </div>
               </Html>
               {/* <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 2.18, 0]} transform occlude>
-                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                <div className="text-xs rounded-md px-2 py-1 border border-primary">
                   beep →
                 </div>
               </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 1.87, 0]} transform occlude>
-                <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
+                <div className="text-xs rounded-md px-2 py-1 border border-primary">
                   boop →
                 </div>
               </Html> */}
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
-                <div className="bg-sky-400 p-4 rounded-md">
-                  <span className="text-lg font-black text-white">ePhone browser</span>
+                <div className="p-4 rounded-md border border-primary">
+                  <span className="text-lg font-black">ePhone browser</span>
                   <br />
-                  <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
+                  <span className="text-xs">Drag the background to rotate the phone and click buttons to use it.</span>
                   <br />
                   <br />
-                  <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
+                  <input type="text" placeholder="url" className="input input-xs input-bordered w-80 focus:outline-0" disabled={disabled}
                     value={urlInput}
                     onChange={
                       (e) => { setUrlInput(e.target.value); }
                     }
                   />
-                  <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
+                  <button className="btn btn-xs mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
                   <br />
-                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                  <button className="btn btn-xs font-normal mr-1 mt-1" disabled={disabled}
                     onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
                   >→ Wiki</button>
-                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                  <button className="btn btn-xs font-normal mr-1 mt-1" disabled={disabled}
                     onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
                   >→ Youtube</button>
                 </div>
