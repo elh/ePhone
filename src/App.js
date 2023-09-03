@@ -26,6 +26,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
   const [urlInput, setUrlInput] = useState(url);
   const [flashlightOn, setFlashlightOn] = useState(false);
   const [flashlightTarget] = useState(() => new THREE.Object3D());
+  const [neverOn, setNeverOn] = useState(true);
 
   // sounds
   const notifUp = new Audio(process.env.PUBLIC_URL + "/notif_up.m4a");
@@ -43,6 +44,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
   const iFrameWrapperRot = landscape ? [0, 0, Math.PI / 2] : [0, 0, 0];
 
   // urls
+  const personalURL = "https://elh.github.io";
   const wikiURL = "https://en.wikipedia.org/wiki/IPhone";
   const youtubeURL = "https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd";
 
@@ -52,7 +54,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
         <primitive object={model.scene} position={modelPos} rotation={modelRot}>
           {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
           {/* On/Off button */}
-          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setScreenOn(!screenOn) }} }>
+          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setScreenOn(!screenOn); setNeverOn(false); }} }>
             <boxGeometry args={[.1, .4, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
@@ -77,22 +79,22 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Sim card */}
-          <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => { click.play(); window.open("https://github.com/elh", "_blank") } }>
+          <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => { click.play(); setUrlInput(personalURL); gotoFn(personalURL); } }>
             <boxGeometry args={[.1, .35, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* position and distanceFactor values I found for iphone-x/model.gltf */}
           {screenOn &&
             <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.33, .091]} rotation={iFrameWrapperRot} distanceFactor={1.28} transform occlude>
-                <Suspense fallback={<div className='text-lg'>LOADING...</div>}>
-                  <iframe src={url} title='ePhone screen' seamless />
-                </Suspense>
-              </Html>
+              <Suspense fallback={<div className='text-lg'>LOADING...</div>}>
+                <iframe src={url} title='ePhone screen' seamless />
+              </Suspense>
+            </Html>
           }
           {!disabled && labelsOn &&
             <>
               {landscape
-                ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.16, 2.88, 0]} transform occlude>
+                ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.14, 2.88, 0]} transform occlude>
                     <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
                       Portrait <CornerRightUp size={14} strokeWidth={2} />
                     </div>
@@ -103,31 +105,21 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
                     </div>
                   </Html>
               }
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.28, 2.05, 0]} transform occlude>
                 <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  ← turn {screenOn ? "off" : "on"}
+                  {landscape ? "" : "← "}turn {screenOn ? "off" : "on"}{neverOn ? " 👋" : ""}
                 </div>
               </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.3, 1.45, 0]} transform occlude>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
                 <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                ← identity <Github size={14} strokeWidth={2} />
+                {landscape ? "" : "← "}owner?
                 </div>
               </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.95, 2.53, 0]} transform occlude>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
                 <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  {labelsOn ? "hide" : "show"} labels →
+                  {labelsOn ? "hide" : "show"} labels{landscape ? "" : " →"}
                 </div>
               </Html>
-              {/* <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 2.18, 0]} transform occlude>
-                <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  beep →
-                </div>
-              </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.90, 1.87, 0]} transform occlude>
-                <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  boop →
-                </div>
-              </Html> */}
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
                 <div className="p-4 rounded-md border border-primary">
                   <span className="text-lg font-black">ePhone browser</span>
