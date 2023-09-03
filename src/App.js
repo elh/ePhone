@@ -51,112 +51,116 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
     <>
       <PresentationControls global polar={[-1, 1]}>
         <primitive object={model.scene} position={modelPos} rotation={modelRot}>
-          {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
-          {/* On/Off button */}
-          <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setScreenOn(!screenOn); }} }>
-            <boxGeometry args={[.1, .4, .2]} />
-            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
-          </mesh>
-          {/* Ring/silent switch */}
-          <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => {if (!disabled) { click.play(); setLabelsOn(!labelsOn) }} }>
-            <boxGeometry args={[.1, .12, .15]} />
-            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
-          </mesh>
-          {/* Up volume button */}
-          <mesh position={[-.7, 2.18, 0]} occlude onClick={ (_) => {if (!disabled) { notifUp.play() }} }>
-            <boxGeometry args={[.1, .24, .15]} />
-            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
-          </mesh>
-          {/* Down volume button */}
-          <mesh position={[-.7, 1.86, 0]} occlude onClick={ (_) => {if (!disabled) { notifDown.play() }} }>
-            <boxGeometry args={[.1, .24, .15]} />
-            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
-          </mesh>
-          {/* Flashlight */}
-          <mesh position={[.7, 2.6, -.10]} occlude onClick={ (_) => {if (!disabled) { setFlashlightOn(!flashlightOn) }} }>
-            <boxGeometry args={[.24, .5, .03]} />
-            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
-          </mesh>
-          {/* Sim card */}
-          <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => { click.play(); setUrlInput(personalURL); gotoFn(personalURL); } }>
-            <boxGeometry args={[.1, .35, .2]} />
-            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
-          </mesh>
-          {/* position and distanceFactor values I found for iphone-x/model.gltf */}
-          {screenOn &&
-            <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.33, .091]} rotation={iFrameWrapperRot} distanceFactor={1.28} transform occlude>
-              <Suspense fallback={<div className='text-lg'>LOADING...</div>}>
-                <iframe src={url} title='ePhone screen' seamless />
-              </Suspense>
-            </Html>
-          }
-          {!disabled && labelsOn &&
+          {!disabled &&
             <>
-              {landscape
-                ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.14, 2.88, 0]} transform occlude>
-                    <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
-                      Portrait <CornerRightUp size={14} strokeWidth={2} />
-                    </div>
-                  </Html>
-                : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.30, 2.95, 0]} transform occlude>
-                    <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
-                      <CornerRightDown size={14} strokeWidth={2} /> Landscape
-                    </div>
-                  </Html>
+              {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
+              {/* On/Off button */}
+              <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => { click.play(); setScreenOn(!screenOn); } }>
+                <boxGeometry args={[.1, .4, .2]} />
+                <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+              </mesh>
+              {/* Ring/silent switch */}
+              <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => { click.play(); setLabelsOn(!labelsOn) } }>
+                <boxGeometry args={[.1, .12, .15]} />
+                <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+              </mesh>
+              {/* Up volume button */}
+              <mesh position={[-.7, 2.18, 0]} occlude onClick={ (_) => { notifUp.play() } }>
+                <boxGeometry args={[.1, .24, .15]} />
+                <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+              </mesh>
+              {/* Down volume button */}
+              <mesh position={[-.7, 1.86, 0]} occlude onClick={ (_) => { notifDown.play() } }>
+                <boxGeometry args={[.1, .24, .15]} />
+                <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+              </mesh>
+              {/* Flashlight */}
+              <mesh position={[.7, 2.6, -.10]} occlude onClick={ (_) => { setFlashlightOn(!flashlightOn) } }>
+                <boxGeometry args={[.24, .5, .03]} />
+                <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+              </mesh>
+              {/* Sim card */}
+              <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => {  click.play(); setUrlInput(personalURL); gotoFn(personalURL); } }>
+                <boxGeometry args={[.1, .35, .2]} />
+                <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+              </mesh>
+              {/* position and distanceFactor values I found for iphone-x/model.gltf */}
+              {screenOn &&
+                <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.33, .091]} rotation={iFrameWrapperRot} distanceFactor={1.28} transform occlude>
+                  <Suspense fallback={<div className='text-lg'>LOADING...</div>}>
+                    <iframe src={url} title='ePhone screen' seamless />
+                  </Suspense>
+                </Html>
               }
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
-                <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  {landscape ? "" : "← "}Turn {screenOn ? "off" : "on"}
-                </div>
-              </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
-                <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                {landscape ? "" : "← "}Owner?
-                </div>
-              </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
-                <div className="text-xs rounded-md px-2 py-1 border border-primary">
-                  {labelsOn ? "Hide" : "Show"} labels{landscape ? "" : " →"}
-                </div>
-              </Html>
-              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
-                <div className="p-4 rounded-md border border-primary">
-                  <span className="text-lg font-black">ePhone browser</span>
-                  <br />
-                  <span className="text-xs">Drag the background to rotate the phone and click buttons to use it.</span>
-                  <br />
-                  <br />
-                  <input type="text" placeholder="url" className="input input-xs input-bordered w-80 focus:outline-0" disabled={disabled}
-                    value={urlInput}
-                    onChange={
-                      (e) => { setUrlInput(e.target.value); }
-                    }
+              {labelsOn &&
+                <>
+                  {landscape
+                    ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.14, 2.88, 0]} transform occlude>
+                        <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
+                          Portrait <CornerRightUp size={14} strokeWidth={2} />
+                        </div>
+                      </Html>
+                    : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.30, 2.95, 0]} transform occlude>
+                        <div className="text-xs rounded-md px-2 py-1 border border-primary" onClick={() => {rotateFn()}}>
+                          <CornerRightDown size={14} strokeWidth={2} /> Landscape
+                        </div>
+                      </Html>
+                  }
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary">
+                      {landscape ? "" : "← "}Turn {screenOn ? "off" : "on"}
+                    </div>
+                  </Html>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary">
+                    {landscape ? "" : "← "}Owner?
+                    </div>
+                  </Html>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary">
+                      {labelsOn ? "Hide" : "Show"} labels{landscape ? "" : " →"}
+                    </div>
+                  </Html>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
+                    <div className="p-4 rounded-md border border-primary">
+                      <span className="text-lg font-black">ePhone browser</span>
+                      <br />
+                      <span className="text-xs">Drag the background to rotate the phone and click buttons to use it.</span>
+                      <br />
+                      <br />
+                      <input type="text" placeholder="url" className="input input-xs input-bordered w-80 focus:outline-0"
+                        value={urlInput}
+                        onChange={
+                          (e) => { setUrlInput(e.target.value); }
+                        }
+                      />
+                      <button className="btn btn-xs mx-1" onClick={() => { gotoFn(urlInput) }}>Go</button>
+                      <br />
+                      <button className="btn btn-xs font-normal mr-1 mt-1"
+                        onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
+                      >→ Wiki</button>
+                      <button className="btn btn-xs font-normal mr-1 mt-1"
+                        onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
+                      >→ Youtube</button>
+                    </div>
+                  </Html>
+                </>
+              }
+              {flashlightOn &&
+                <>
+                  <primitive object={flashlightTarget} position={[0, 0, -50]} />
+                  <SpotLight
+                    position={[.7, 2.6, -.10]}
+                    target={flashlightTarget}
+                    distance={10}
+                    angle={0.45}
+                    attenuation={20}
+                    anglePower={5}
+                    intensity={4}
+                    opacity={3}
                   />
-                  <button className="btn btn-xs mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
-                  <br />
-                  <button className="btn btn-xs font-normal mr-1 mt-1" disabled={disabled}
-                    onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
-                  >→ Wiki</button>
-                  <button className="btn btn-xs font-normal mr-1 mt-1" disabled={disabled}
-                    onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
-                  >→ Youtube</button>
-                </div>
-              </Html>
-            </>
-          }
-          {flashlightOn &&
-            <>
-              <primitive object={flashlightTarget} position={[0, 0, -50]} />
-              <SpotLight
-                position={[.7, 2.6, -.10]}
-                target={flashlightTarget}
-                distance={10}
-                angle={0.45}
-                attenuation={20}
-                anglePower={5}
-                intensity={4}
-                opacity={3}
-              />
+                </>
+              }
             </>
           }
         </primitive>
