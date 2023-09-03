@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera } from '@react-three/drei';
+import * as THREE from 'three';
+import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, SpotLight, useDepthBuffer } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
 import { Info, Github } from 'lucide-react';
@@ -21,6 +22,8 @@ function isValidHttpUrl(string) {
 // Supports portrait and landscape orientations
 function Phone({ url, landscape = false, disabled = false }) {
   const [screenOn, setScreenOn] = useState(false);
+  const [flashlightOn, setFlashlightOn] = useState(false);
+  const [flashlightTarget] = useState(() => new THREE.Object3D());
 
   // from market.pmnd.rs
   const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
@@ -57,8 +60,13 @@ function Phone({ url, landscape = false, disabled = false }) {
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Flashlight */}
-          <mesh position={[.7, 2.6, -.15]} occlude>
-            <boxGeometry args={[.24, .5, .10]} />
+          <mesh position={[.7, 2.6, -.10]} occlude onClick={ (_) => {if (!disabled) { setFlashlightOn(!flashlightOn)}} }>
+            <boxGeometry args={[.24, .5, .03]} />
+            <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
+          </mesh>
+          {/* Sim card */}
+          <mesh position={[1, 1.43, 0]} occlude>
+            <boxGeometry args={[.1, .35, .2]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* position and distanceFactor values I found for iphone-x/model.gltf */}
@@ -77,6 +85,21 @@ function Phone({ url, landscape = false, disabled = false }) {
             </Html>
           }
         </primitive>
+        {flashlightOn &&
+          <>
+            <primitive object={flashlightTarget} position={[0, 0, -50]} />
+            <SpotLight
+              position={[.7, 1.17, -.2]}
+              target={flashlightTarget}
+              distance={10}
+              angle={0.45}
+              attenuation={20}
+              anglePower={5}
+              intensity={4}
+              opacity={4}
+            />
+          </>
+        }
       </PresentationControls>
     </>
   );
