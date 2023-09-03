@@ -35,17 +35,23 @@ html {
 }
 
 .iframe-wrapper iframe {
-  width: 563px;
-  height: 1218px;
+  /* width: 563px;
+  height: 1218px; */
+  width: 469px;
+  height: 1015px;
   border: none;
   border-radius: 65px;
+  overflow: hidden;
 }
 
 .iframe-wrapper-landscape iframe {
-  width: 1218px;
-  height: 563px;
+  /* width: 1218px;
+  height: 563px; */
+  width: 1015px;
+  height: 469px;
   border: none;
   border-radius: 65px;
+  overflow: hidden;
 }
 
 .info {

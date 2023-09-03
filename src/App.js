@@ -43,9 +43,9 @@ function Phone({ url, landscape = false, disabled = false }) {
           </mesh>
           {/* position and distanceFactor values I found for iphone-x/model.gltf */}
           {screenOn &&
-            <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.32, .091]} rotation={iFrameWrapperRot} distanceFactor={1.068} transform occlude>
+            <Html zIndexRange={[1000000, 0]} wrapperClass={iFrameWrapperClass} position={[.17, 1.33, .091]} rotation={iFrameWrapperRot} distanceFactor={1.28} transform occlude>
                 <Suspense fallback={<div className='text-lg'>LOADING...</div>}>
-                  <iframe src={url} title='ePhone screen' />
+                  <iframe src={url} title='ePhone screen' seamless />
                 </Suspense>
               </Html>
           }
