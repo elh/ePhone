@@ -84,22 +84,22 @@ function Phone({ url, landscape = false, disabled = false }) {
               </div>
             </Html>
           }
+          {flashlightOn &&
+            <>
+              <primitive object={flashlightTarget} position={[0, 0, -50]} />
+              <SpotLight
+                position={[.7, 2.6, -.10]}
+                target={flashlightTarget}
+                distance={10}
+                angle={0.45}
+                attenuation={20}
+                anglePower={5}
+                intensity={4}
+                opacity={3}
+              />
+            </>
+          }
         </primitive>
-        {flashlightOn &&
-          <>
-            <primitive object={flashlightTarget} position={[0, 0, -50]} />
-            <SpotLight
-              position={[.7, 1.17, -.2]}
-              target={flashlightTarget}
-              distance={10}
-              angle={0.45}
-              attenuation={20}
-              anglePower={5}
-              intensity={4}
-              opacity={4}
-            />
-          </>
-        }
       </PresentationControls>
     </>
   );
