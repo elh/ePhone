@@ -21,6 +21,7 @@ function isValidHttpUrl(string) {
 // Phone model with an iframe rendered over the screen
 // Supports portrait and landscape orientations
 function Phone({ url, landscape = false, disabled = false }) {
+  const [labelsOn, setLabelsOn] = useState(true);
   const [screenOn, setScreenOn] = useState(false);
   const [flashlightOn, setFlashlightOn] = useState(false);
   const [flashlightTarget] = useState(() => new THREE.Object3D());
@@ -45,7 +46,7 @@ function Phone({ url, landscape = false, disabled = false }) {
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
           {/* Ring/silent switch */}
-          <mesh position={[-.7, 2.52, 0]} occlude>
+          <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => {if (!disabled) { setLabelsOn(!labelsOn)}} }>
             <boxGeometry args={[.1, .12, .15]} />
             <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
           </mesh>
@@ -77,12 +78,19 @@ function Phone({ url, landscape = false, disabled = false }) {
                 </Suspense>
               </Html>
           }
-          {!screenOn && !disabled &&
-            <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
-              <div className="text-xs bg-sky-400 text-white rounded-md p-1">
-                ← turn on
-              </div>
-            </Html>
+          {!disabled && labelsOn &&
+            <>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
+                <div className="text-xs bg-sky-400 text-white rounded-md p-1">
+                  ← turn {screenOn ? "off" : "on"}
+                </div>
+              </Html>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-0.95, 2.53, 0]} transform occlude>
+                <div className="text-xs bg-sky-400 text-white rounded-md p-1">
+                  {labelsOn ? "hide" : "show"} labels →
+                </div>
+              </Html>
+            </>
           }
           {flashlightOn &&
             <>
