@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, SpotLight } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
-import { Info, Github } from 'lucide-react';
+import { Github, CornerRightDown } from 'lucide-react';
 import {isMobile} from 'react-device-detect';
 
 function isValidHttpUrl(string) {
@@ -20,9 +20,10 @@ function isValidHttpUrl(string) {
 
 // Phone model with an iframe rendered over the screen
 // Supports portrait and landscape orientations
-function Phone({ url, landscape = false, disabled = false }) {
+function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false }) {
   const [labelsOn, setLabelsOn] = useState(true);
   const [screenOn, setScreenOn] = useState(false);
+  const [urlInput, setUrlInput] = useState(url);
   const [flashlightOn, setFlashlightOn] = useState(false);
   const [flashlightTarget] = useState(() => new THREE.Object3D());
 
@@ -40,6 +41,10 @@ function Phone({ url, landscape = false, disabled = false }) {
   const modelRot = landscape ? [0, 0, -Math.PI / 2] : [-0.05, 0, 0];
   const iFrameWrapperClass = landscape ? 'iframe-wrapper-landscape' : 'iframe-wrapper';
   const iFrameWrapperRot = landscape ? [0, 0, Math.PI / 2] : [0, 0, 0];
+
+  // urls
+  const wikiURL = "https://en.wikipedia.org/wiki/IPhone";
+  const youtubeURL = "https://www.youtube.com/embed/_YUzQa_1RCE?si=Bbd79-yAvUR3sRtd";
 
   return (
     <>
@@ -86,6 +91,11 @@ function Phone({ url, landscape = false, disabled = false }) {
           }
           {!disabled && labelsOn &&
             <>
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.28, 2.95, 0]} transform occlude>
+                <div className="text-sm rounded-md px-2 py-1" onClick={() => {rotateFn()}}>
+                  <CornerRightDown size={14} strokeWidth={2} /> Landscape
+                </div>
+              </Html>
               <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.25, 2.05, 0]} transform occlude>
                 <div className="text-xs bg-sky-400 text-white rounded-md px-2 py-1">
                   ← turn {screenOn ? "off" : "on"}
@@ -111,6 +121,29 @@ function Phone({ url, landscape = false, disabled = false }) {
                   boop →
                 </div>
               </Html> */}
+              <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[-1.65, 1.4, 0]} transform occlude>
+                <div className="bg-sky-400 p-4 rounded-md">
+                  <span className="text-lg font-black text-white">ePhone browser</span>
+                  <br />
+                  <span className="text-xs text-white">Drag the background to rotate the phone and click buttons to use it.</span>
+                  <br />
+                  <br />
+                  <input type="text" placeholder="url" className="input input-xs input-bordered hover:bg-white bg-white text-black w-80 focus:outline-0" disabled={disabled}
+                    value={urlInput}
+                    onChange={
+                      (e) => { setUrlInput(e.target.value); }
+                    }
+                  />
+                  <button className="btn btn-xs hover:bg-white bg-white text-black border-0 mx-1" disabled={disabled} onClick={() => { gotoFn(urlInput) }}>Go</button>
+                  <br />
+                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                    onClick={() => { setUrlInput(wikiURL); gotoFn(wikiURL) }}
+                  >→ Wiki</button>
+                  <button className="btn btn-xs font-normal hover:bg-white bg-white text-black border-0 mr-1 mt-1" disabled={disabled}
+                    onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
+                  >→ Youtube</button>
+                </div>
+              </Html>
             </>
           }
           {flashlightOn &&
@@ -137,9 +170,9 @@ function Phone({ url, landscape = false, disabled = false }) {
 function App() {
   const queryParameters = new URLSearchParams(window.location.search)
   const [url, setUrl] = useState(queryParameters.get("url"));
-  const [urlInput, setUrlInput] = useState(queryParameters.get("url"));
+  // const [urlInput, setUrlInput] = useState(queryParameters.get("url"));
   const [landscape, setLandscape] = useState(!!queryParameters.get("landscape"));
-  const [showInfo, setShowInfo] = useState(false);
+  // const [showInfo, setShowInfo] = useState(false);
 
   const baseCameraPos = landscape ? [-.1, .1, 3.4] : [0, -.1, 4.5];
   const cameraPos = isMobile ? (landscape ? [0, 0, 12] : [0, 0, 7]) : baseCameraPos;
@@ -165,13 +198,13 @@ function App() {
     windowURL.searchParams.set('url', url);
     window.history.pushState({}, "", windowURL);
 
-    setUrlInput(url); // just in case it was directly provided
+    // setUrlInput(url); // just in case it was directly provided
     setUrl(url);
   }
 
   return (
     <div className="App">
-      <div className='info'>
+      {/* <div className='info'>
         <button onClick={() => { setShowInfo(!showInfo) }}><Info size={20} strokeWidth={2} /></button>
         <br />
         {showInfo &&
@@ -196,7 +229,7 @@ function App() {
             <br />
           </div>
         }
-      </div>
+      </div> */}
       {isMobile && <div className="p-4 text-center text-sm italic">Open on desktop to turn on the ePhone</div>}
       <div className='links'>
         <a href={`https://github.com/elh/ePhone`} className="link link-hover"><Github size={20} strokeWidth={2} /></a>
@@ -207,7 +240,7 @@ function App() {
           <Environment preset="night" />
           {/* <ambientLight intensity={0.3} /> */}
           {/* If detected to be on mobile, don't iframe. Positioning is currently off and it's a bad experience anyways on a small screen */}
-          <Phone url={url ? url : "https://elh.github.io"} landscape={!!landscape} disabled={isMobile} />
+          <Phone url={url ? url : "https://elh.github.io"} landscape={!!landscape} disabled={isMobile} rotateFn={rotate} gotoFn={goto} />
         </Suspense>
       </Canvas>
     </div>
