@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/ePhone/static/css/main.90c2efe5.css",
-    "main.js": "/ePhone/static/js/main.ad0bd3ef.js",
+    "main.js": "/ePhone/static/js/main.2de04594.js",
     "static/js/787.7c4cb66f.chunk.js": "/ePhone/static/js/787.7c4cb66f.chunk.js",
     "index.html": "/ePhone/index.html",
     "main.90c2efe5.css.map": "/ePhone/static/css/main.90c2efe5.css.map",
-    "main.ad0bd3ef.js.map": "/ePhone/static/js/main.ad0bd3ef.js.map",
+    "main.2de04594.js.map": "/ePhone/static/js/main.2de04594.js.map",
     "787.7c4cb66f.chunk.js.map": "/ePhone/static/js/787.7c4cb66f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.90c2efe5.css",
-    "static/js/main.ad0bd3ef.js"
+    "static/js/main.2de04594.js"
   ]
 }
