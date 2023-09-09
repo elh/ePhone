@@ -6,6 +6,7 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
 import { Github, CornerRightDown, CornerRightUp } from 'lucide-react';
 import {isMobile} from 'react-device-detect';
+import { ErrorBoundary } from "react-error-boundary";
 
 function isValidHttpUrl(string) {
   let url;
@@ -208,23 +209,25 @@ function App() {
       <div className='links'>
         <a href={`https://github.com/elh/ePhone`} className="link link-hover"><Github size={20} strokeWidth={2} /></a>
       </div>
-      <Canvas>
-        <Suspense fallback={null}>
-          <PerspectiveCamera makeDefault fov={45} position={cameraPos} />
-          <Environment preset="night" />
-          {/* <ambientLight intensity={0.3} /> */}
-          {/* If detected to be on mobile, don't iframe. Positioning is currently off and it's a bad experience anyways on a small screen */}
-          <Phone
-            url={url ? url : "https://elh.github.io"}
-            landscape={!!landscape}
-            disabled={isMobile}
-            rotateFn={rotate}
-            gotoFn={goto}
-            off={off}
-            hide={hide}
-          />
-        </Suspense>
-      </Canvas>
+      <ErrorBoundary fallback={<div>Failed to load the model ☹️</div>}>
+        <Canvas>
+          <Suspense fallback={null}>
+            <PerspectiveCamera makeDefault fov={45} position={cameraPos} />
+            <Environment preset="night" />
+            {/* <ambientLight intensity={0.3} /> */}
+            {/* If detected to be on mobile, don't iframe. Positioning is currently off and it's a bad experience anyways on a small screen */}
+            <Phone
+              url={url ? url : "https://elh.github.io"}
+              landscape={!!landscape}
+              disabled={isMobile}
+              rotateFn={rotate}
+              gotoFn={goto}
+              off={off}
+              hide={hide}
+            />
+          </Suspense>
+        </Canvas>
+      </ErrorBoundary>
     </div>
   );
 }
