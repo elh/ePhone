@@ -28,6 +28,9 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
   const [flashlightOn, setFlashlightOn] = useState(false);
   const [flashlightTarget] = useState(() => new THREE.Object3D());
 
+  // first time user experience stuff
+  const [beenScreenOn, setBeenScreenOn] = useState(!off);
+
   // sounds
   const notifUp = new Audio(process.env.PUBLIC_URL + "/notif_up.m4a");
   const notifDown = new Audio(process.env.PUBLIC_URL + "/notif_down.m4a");
@@ -39,7 +42,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
 
   // phone orientation
   const modelPos = landscape ? [-1.4, 0, 0] : [0, -1.4, 0];
-  const modelRot = landscape ? [0, 0, -Math.PI / 2] : [-0.05, 0, 0];
+  const modelRot = landscape ? [0, 0, -Math.PI / 2] : [-0.05, -.4, 0];
   const iFrameWrapperClass = landscape ? 'iframe-wrapper-landscape' : 'iframe-wrapper';
   const iFrameWrapperRot = landscape ? [0, 0, Math.PI / 2] : [0, 0, 0];
 
@@ -56,7 +59,14 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
             <>
               {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
               {/* On/Off button */}
-              <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => { click.play(); setScreenOn(!screenOn); } }>
+              <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {
+                click.play();
+                setScreenOn(!screenOn);
+                if (!beenScreenOn) {
+                  setLabelsOn(true);
+                }
+                setBeenScreenOn(true);
+              }}>
                 <boxGeometry args={[.1, .4, .2]} />
                 <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
               </mesh>
@@ -107,19 +117,14 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                         </div>
                       </Html>
                   }
-                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
                     <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
-                      {landscape ? "" : "← "}Turn {screenOn ? "off" : "on"}
+                      {labelsOn ? "Hide" : "Show"} labels{landscape ? "" : " →"}
                     </div>
                   </Html>
                   <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
                     <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
                     {landscape ? "" : "← "}Owner?
-                    </div>
-                  </Html>
-                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
-                    <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
-                      {labelsOn ? "Hide" : "Show"} labels{landscape ? "" : " →"}
                     </div>
                   </Html>
                   <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
@@ -143,6 +148,15 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                       <button className="btn btn-xs font-normal mr-1 mt-1 bg-primary"
                         onClick={() => { setUrlInput(youtubeURL); gotoFn(youtubeURL) }}
                       >→ Youtube</button>
+                    </div>
+                  </Html>
+                </>
+              }
+              {(labelsOn || !beenScreenOn)  &&
+                <>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
+                    <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
+                      {landscape ? "" : "← "}Turn {screenOn ? "off" : "on"}
                     </div>
                   </Html>
                 </>
