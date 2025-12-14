@@ -5,7 +5,7 @@ import { Environment, PresentationControls, useGLTF, Html, PerspectiveCamera, Sp
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react'
 import { Github, CornerRightDown, CornerRightUp } from 'lucide-react';
-import {isMobile} from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import { ErrorBoundary } from "react-error-boundary";
 
 function isValidHttpUrl(string) {
@@ -37,8 +37,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
   const click = new Audio(process.env.PUBLIC_URL + "/click.mp3");
   click.volume = 0.3;
 
-  // from market.pmnd.rs
-  const model = useGLTF("https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/iphone-x/model.gltf");
+  const model = useGLTF(process.env.PUBLIC_URL + "/model.gltf");
 
   // phone orientation
   const modelPos = landscape ? [-1.4, 0, 0] : [0, -1.4, 0];
@@ -59,7 +58,7 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
             <>
               {/* NOTE: occlude=blending causes issues with borders. so just try to avoid any geometry occlusion for now */}
               {/* On/Off button */}
-              <mesh position={[1, 2.05, 0]} occlude onClick={ (_) => {
+              <mesh position={[1, 2.05, 0]} occlude onClick={(_) => {
                 click.play();
                 setScreenOn(!screenOn);
                 if (!beenScreenOn) {
@@ -71,27 +70,27 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                 <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
               </mesh>
               {/* Ring/silent switch */}
-              <mesh position={[-.7, 2.52, 0]} occlude onClick={ (_) => { click.play(); setLabelsOn(!labelsOn) } }>
+              <mesh position={[-.7, 2.52, 0]} occlude onClick={(_) => { click.play(); setLabelsOn(!labelsOn) }}>
                 <boxGeometry args={[.1, .12, .15]} />
                 <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
               </mesh>
               {/* Up volume button */}
-              <mesh position={[-.7, 2.18, 0]} occlude onClick={ (_) => { notifUp.play() } }>
+              <mesh position={[-.7, 2.18, 0]} occlude onClick={(_) => { notifUp.play() }}>
                 <boxGeometry args={[.1, .24, .15]} />
                 <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
               </mesh>
               {/* Down volume button */}
-              <mesh position={[-.7, 1.86, 0]} occlude onClick={ (_) => { notifDown.play() } }>
+              <mesh position={[-.7, 1.86, 0]} occlude onClick={(_) => { notifDown.play() }}>
                 <boxGeometry args={[.1, .24, .15]} />
                 <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
               </mesh>
               {/* Flashlight */}
-              <mesh position={[.7, 2.6, -.10]} occlude onClick={ (_) => { setFlashlightOn(!flashlightOn) } }>
+              <mesh position={[.7, 2.6, -.10]} occlude onClick={(_) => { setFlashlightOn(!flashlightOn) }}>
                 <boxGeometry args={[.24, .5, .03]} />
                 <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
               </mesh>
               {/* Sim card */}
-              <mesh position={[1, 1.43, 0]} occlude onClick={ (_) => {  click.play(); setUrlInput(personalURL); gotoFn(personalURL); } }>
+              <mesh position={[1, 1.43, 0]} occlude onClick={(_) => { click.play(); setUrlInput(personalURL); gotoFn(personalURL); }}>
                 <boxGeometry args={[.1, .35, .2]} />
                 <meshStandardMaterial color={'hotpink'} transparent opacity={0} />
               </mesh>
@@ -107,31 +106,33 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                 <>
                   {landscape
                     ? <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, Math.PI / 2]} position={[1.14, 2.88, 0]} transform occlude>
-                        <div className="btn btn-xs font-normal bg-primary" onClick={() => {rotateFn()}}>
-                          Portrait<CornerRightUp size={12} strokeWidth={2.5} />
-                        </div>
-                      </Html>
+                      <div className="btn btn-xs font-normal bg-primary" onClick={() => { rotateFn() }}>
+                        Portrait<CornerRightUp size={12} strokeWidth={2.5} />
+                      </div>
+                    </Html>
                     : <Html scale={.2} zIndexRange={[1000000, 0]} rotation={[0, 0, 0]} position={[1.30, 2.95, 0]} transform occlude>
-                        <div className="btn btn-xs font-normal bg-primary" onClick={() => {rotateFn()}}>
-                          <CornerRightDown size={12} strokeWidth={2.5} />Landscape
-                        </div>
-                      </Html>
+                      <div className="btn btn-xs font-normal bg-primary" onClick={() => { rotateFn() }}>
+                        <CornerRightDown size={12} strokeWidth={2.5} />Landscape
+                      </div>
+                    </Html>
                   }
-                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2] : [0, 0, 0]} position={landscape ? [-0.79, 2.53, 0] : [-0.95, 2.53, 0]} transform occlude>
                     <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
                       {labelsOn ? "Hide" : "Show"} labels{landscape ? "" : " →"}
                     </div>
                   </Html>
-                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2] : [0, 0, 0]} position={landscape ? [1.14, 1.45, 0] : [1.26, 1.45, 0]} transform occlude>
                     <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
-                    {landscape ? "" : "← "}Owner?
+                      {landscape ? "" : "← "}Owner?
                     </div>
                   </Html>
-                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2] : [0, 0, 0]} position={landscape ? [-1.07, 0.52, 0] : [-1.65, 1.4, 0]} transform occlude>
                     <div className="p-4 rounded-md border border-primary bg-black">
                       <span className="text-lg font-black">ePhone browser</span>
                       <br />
                       <span className="text-xs">Drag the background to rotate the phone and click buttons to use it.</span>
+                      <br />
+                      <span className="text-xs">iPhone X model by sriniwasjha (CC0).</span>
                       <br />
                       <br />
                       <input type="text" placeholder="url" className="input input-xs input-bordered w-80 focus:outline-0"
@@ -152,9 +153,9 @@ function Phone({ url, gotoFn, rotateFn, landscape = false, disabled = false, off
                   </Html>
                 </>
               }
-              {(labelsOn || !beenScreenOn)  &&
+              {(labelsOn || !beenScreenOn) &&
                 <>
-                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2]: [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
+                  <Html scale={.2} zIndexRange={[1000000, 0]} rotation={landscape ? [0, 0, Math.PI / 2] : [0, 0, 0]} position={landscape ? [1.14, 2.05, 0] : [1.26, 2.05, 0]} transform occlude>
                     <div className="text-xs rounded-md px-2 py-1 border border-primary bg-black">
                       {landscape ? "" : "← "}Turn {screenOn ? "off" : "on"}
                     </div>
